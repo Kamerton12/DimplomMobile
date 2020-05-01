@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/lessons"
+        android:icon="@drawable/ic_schedule"
+        android:title="Пары" />
+    <item
+        android:id="@+id/teachers"
+        android:icon="@drawable/ic_teacher"
+        android:title="Преподаватели" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Настройки" />
+</menu>

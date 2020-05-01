@@ -4,6 +4,7 @@ import by.mrc.shedule.teacher.Teacher
 import java.util.*
 
 data class Schedule(
+    val id: Int,
     val startTime: Date,
     val endTime: Date,
     val discipline: String,

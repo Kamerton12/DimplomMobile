@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import by.mrc.shedule.R
-import kotlinx.android.synthetic.main.fragment_shedule.*
+import kotlinx.android.synthetic.main.fragment_day.*
+import kotlinx.android.synthetic.main.fragment_schedule.*
 
 
 class TeachersFragment: Fragment() {
@@ -23,5 +24,9 @@ class TeachersFragment: Fragment() {
         swipeRefresh.setOnRefreshListener {
             swipeRefresh.isRefreshing = false
         }
+    }
+
+    companion object {
+        const val TAG = "TeachersFragment"
     }
 }
