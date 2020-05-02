@@ -1,4 +1,4 @@
-package by.mrc.shedule.schedule
+package by.mrc.schedule.schedule
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable

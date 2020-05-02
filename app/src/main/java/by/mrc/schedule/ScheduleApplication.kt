@@ -1,7 +1,7 @@
-package by.mrc.shedule
+package by.mrc.schedule
 
 import android.app.Application
-import by.mrc.shedule.di.ApplicationModule
+import by.mrc.schedule.di.ApplicationModule
 import toothpick.Toothpick
 
 class ScheduleApplication : Application() {

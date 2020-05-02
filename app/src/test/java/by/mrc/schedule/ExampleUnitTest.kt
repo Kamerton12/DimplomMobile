@@ -1,4 +1,4 @@
-package by.mrc.shedule
+package by.mrc.schedule
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package by.mrc.shedule.schedule
+package by.mrc.schedule.schedule
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

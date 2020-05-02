@@ -1,4 +1,4 @@
-package by.mrc.shedule.view;
+package by.mrc.schedule.view;
 /*
  * Copyright 2018 The Android Open Source Project
  *

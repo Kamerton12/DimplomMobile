@@ -1,7 +1,7 @@
-package by.mrc.shedule.di
+package by.mrc.schedule.di
 
 import android.content.Context
-import by.mrc.shedule.schedule.ScheduleRepository
+import by.mrc.schedule.schedule.ScheduleRepository
 import okhttp3.OkHttpClient
 import toothpick.config.Module
 

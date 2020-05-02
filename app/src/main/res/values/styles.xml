@@ -6,6 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+<!--         <item name="android:textColor">@color/text</item>-->
+<!--         <item name="android:textColorSecondary">@color/text_secondary</item>-->
+        <item name="colorControlHighlight">@color/ripple_color</item>
+        <!--when the check box is checked-->
+        <!--<item name="colorControlNormal">#FF4081</item>-->
+        <!--when the check box is unchecked -->
+        <!--<item name="colorControlActivated">#81FF40</item>-->
     </style>
 
 </resources>

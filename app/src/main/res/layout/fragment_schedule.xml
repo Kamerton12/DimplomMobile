@@ -12,10 +12,11 @@
         android:nestedScrollingEnabled="true"
         android:orientation="vertical">
 
-        <by.mrc.shedule.view.CustomPagerTitleStrip
+        <by.mrc.schedule.view.CustomPagerTitleStrip
             android:id="@+id/custom_strip"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="#1F2023"/>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"

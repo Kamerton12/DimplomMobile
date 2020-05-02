@@ -1,10 +1,10 @@
-package by.mrc.shedule.schedule
+package by.mrc.schedule.schedule
 
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import by.mrc.shedule.R
-import by.mrc.shedule.teacher.Teacher
+import by.mrc.schedule.R
+import by.mrc.schedule.teacher.Teacher
 import java.text.SimpleDateFormat
 import java.util.*
 

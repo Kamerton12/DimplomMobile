@@ -7,4 +7,5 @@
     <color name="base">#1F2023</color>
     <color name="text">#E6FFFFFF</color>
     <color name="text_secondary">#B3FFFFFF</color>
+    <color name="ripple_color">#636363</color>
 </resources>

@@ -1,4 +1,4 @@
-package by.mrc.shedule.teacher
+package by.mrc.schedule.teacher
 
 data class Teacher(
     val name: String,

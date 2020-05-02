@@ -1,4 +1,4 @@
-package by.mrc.shedule.schedule
+package by.mrc.schedule.schedule
 
 interface ScheduleView {
 

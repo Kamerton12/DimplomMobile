@@ -1,4 +1,4 @@
-package by.mrc.shedule
+package by.mrc.schedule
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

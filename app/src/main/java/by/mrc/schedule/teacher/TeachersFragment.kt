@@ -1,12 +1,11 @@
-package by.mrc.shedule.teacher
+package by.mrc.schedule.teacher
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import by.mrc.shedule.R
-import kotlinx.android.synthetic.main.fragment_day.*
+import by.mrc.schedule.R
 import kotlinx.android.synthetic.main.fragment_schedule.*
 
 

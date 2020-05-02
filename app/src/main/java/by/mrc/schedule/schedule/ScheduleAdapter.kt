@@ -1,9 +1,9 @@
-package by.mrc.shedule.schedule
+package by.mrc.schedule.schedule
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import by.mrc.shedule.R
+import by.mrc.schedule.R
 
 class ScheduleAdapter : RecyclerView.Adapter<ScheduleViewHolder>() {
 

@@ -1,10 +1,9 @@
-package by.mrc.shedule.pager
+package by.mrc.schedule.pager
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import by.mrc.shedule.schedule.DayView
-import by.mrc.shedule.schedule.Schedule
+import by.mrc.schedule.schedule.DayView
+import by.mrc.schedule.schedule.Schedule
 
 class SchedulePagerAdapter : RecyclerView.Adapter<ScheduleViewHolder>() {
 

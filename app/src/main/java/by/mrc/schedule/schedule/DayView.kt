@@ -1,20 +1,11 @@
-package by.mrc.shedule.schedule
+package by.mrc.schedule.schedule
 
 import android.content.Context
-import android.os.Bundle
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.fragment.app.Fragment
-import by.mrc.shedule.R
-import by.mrc.shedule.teacher.Teacher
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_day.*
+import by.mrc.schedule.R
 import kotlinx.android.synthetic.main.fragment_day.view.*
-import toothpick.Toothpick
-import java.util.*
 
 
 class DayView(context: Context, attributeSet: AttributeSet? = null): FrameLayout(context, attributeSet) {

@@ -1,6 +1,6 @@
-package by.mrc.shedule.schedule
+package by.mrc.schedule.schedule
 
-import by.mrc.shedule.teacher.Teacher
+import by.mrc.schedule.teacher.Teacher
 import java.util.*
 
 data class Schedule(
