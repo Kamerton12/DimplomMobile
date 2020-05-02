@@ -1,26 +1,31 @@
 package by.mrc.schedule
 
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import androidx.fragment.app.FragmentManager
 import by.mrc.schedule.schedule.ScheduleFragment
 import by.mrc.schedule.teacher.TeachersFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet_settings.*
+import toothpick.Toothpick
 import java.lang.IllegalArgumentException
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainView {
 
     private val fragmentTags = listOf(TeachersFragment.TAG, ScheduleFragment.TAG)
+    private val dialogs = MainDialogs(this)
+    private val presenter = MainPresenter(this)
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Toothpick.inject(dialogs, Toothpick.openScope("APP"))
+        Toothpick.inject(presenter, Toothpick.openScope("APP"))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
 
@@ -51,6 +56,7 @@ class MainActivity : AppCompatActivity() {
             false
         }
         bottom_navigation.selectedItemId = R.id.lessons
+        presenter.loadCurrentGroupAndUpdateTitle()
     }
 
     private fun FragmentManager.openFragment(tag: String) {
@@ -72,5 +78,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
         transaction.commitNow()
+    }
+
+    override fun getDialogs(): MainDialogs {
+        return dialogs
+    }
+
+    override fun setTitle(text: String) {
+        title = text
+    }
+
+    override fun hideBottomSheet() {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 }

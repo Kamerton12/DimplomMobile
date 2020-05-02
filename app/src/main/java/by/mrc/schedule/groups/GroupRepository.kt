@@ -1,32 +1,20 @@
-package by.mrc.schedule.schedule
+package by.mrc.schedule.groups
 
+import by.mrc.schedule.schedule.Schedule
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.*
 import java.io.IOException
-import java.util.*
 import javax.inject.Inject
 
-private val gson: Gson by lazy {
-    val timestampDeserializer = JsonDeserializer { src, typeOfSrc, context ->
-        Date(src.asLong)
-    }
-
-    GsonBuilder()
-        .registerTypeAdapter(Date::class.java, timestampDeserializer)
-        .create()
-}
-
-class ScheduleRepository @Inject constructor(
+class GroupRepository @Inject constructor(
     private val okHttpClient: OkHttpClient
 ) {
-    fun getSchedule(groupName: String): Single<List<Schedule>> {
-        return Single.create<List<Schedule>> { emitter ->
+    fun getGroups(): Single<List<String>> {
+        return Single.create<List<String>> { emitter ->
             val request = Request.Builder()
-                .url("http://192.168.0.25/user_api/lessons")
+                .url("http://192.168.0.25/user_api/groups")
                 .get()
                 .build()
             okHttpClient.newCall(request).enqueue(object: Callback {
@@ -36,14 +24,11 @@ class ScheduleRepository @Inject constructor(
 
                 override fun onResponse(call: Call, response: Response) {
                     val responseString = response.body?.string() ?: "[]"
-                    val res = gson.fromJson(responseString, Array<Schedule>::class.java).toList()
+                    val res = Gson().fromJson(responseString, Array<String>::class.java).toList()
                     emitter.onSuccess(res)
                 }
             })
         }
-            .map { list ->
-                list.filter { it.group == groupName }
-            }
             .subscribeOn(Schedulers.io())
     }
 }

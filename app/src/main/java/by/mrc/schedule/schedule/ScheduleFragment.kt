@@ -32,6 +32,8 @@ class ScheduleFragment : Fragment(), ScheduleView {
         savedInstanceState: Bundle?
     ): View? {
         Toothpick.inject(presenter, Toothpick.openScope("APP"))
+        presenter.scheduleUpdates()
+            .subscribe()
         return inflater.inflate(R.layout.fragment_schedule, container, false)
     }
 
@@ -43,10 +45,6 @@ class ScheduleFragment : Fragment(), ScheduleView {
 
         swipeRefresh.setOnRefreshListener {
             presenter.updateSchedule()
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnEvent {
-                    swipeRefresh.isRefreshing = false
-                }
                 .subscribe()
         }
         val list = listOf(
@@ -163,6 +161,7 @@ class ScheduleFragment : Fragment(), ScheduleView {
     }
 
     override fun renderSchedule(schedule: List<Schedule>) {
+        swipeRefresh.isRefreshing = false
         val data = schedule.groupBy {
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = it.startTime.time
@@ -179,6 +178,10 @@ class ScheduleFragment : Fragment(), ScheduleView {
 
             override fun getSize(): Int = data.size
         })
+    }
+
+    override fun renderStartUpdate() {
+        swipeRefresh.isRefreshing = true
     }
 
     private fun Date?.format(): String {
