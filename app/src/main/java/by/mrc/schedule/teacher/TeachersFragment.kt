@@ -39,12 +39,6 @@ class TeachersFragment: Fragment(), TeacherView {
             presenter.updateTeachers()
         }
         teacher_recycler.adapter = adapter
-//        teacher_recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-//        adapter.populate(listOf(Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("Леонид", "Назаров", "Викторович", "+375 (44) 77-33-782", "Преподаватель высшей категории дисциплин общепрофессионального и специального циклов\n" +
-//                "\n" +
-//                "e-mail: leon_naz1@tut.by\n" +
-//                "\n" +
-//                "тел. (017) 351-03-51")))
         presenter.updateTeachers()
     }
 

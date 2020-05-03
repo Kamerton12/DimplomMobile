@@ -25,8 +25,18 @@ class ScheduleRepository @Inject constructor(
 ) {
     fun getSchedule(groupName: String): Single<List<Schedule>> {
         return Single.create<List<Schedule>> { emitter ->
+            val date = Calendar.getInstance()
+            if(date.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+                date.add(Calendar.DAY_OF_MONTH, -2)
+            } else {
+                date.add(Calendar.DAY_OF_MONTH, -1)
+            }
+            date.set(Calendar.HOUR_OF_DAY, 0)
+            date.set(Calendar.MINUTE, 0)
+            date.set(Calendar.SECOND, 0)
+            date.set(Calendar.MILLISECOND, 0)
             val request = Request.Builder()
-                .url("http://192.168.0.25/user_api/lessons")
+                .url("http://192.168.0.25/user_api/lessons?from=${date.timeInMillis}")
                 .get()
                 .build()
             okHttpClient.newCall(request).enqueue(object: Callback {

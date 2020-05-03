@@ -27,6 +27,8 @@ class ScheduleFragment : Fragment(), ScheduleView {
     private val formatter = SimpleDateFormat("EEEE dd.MM", Locale.getDefault())
     private val formatterYear = SimpleDateFormat("EEEE dd.MM.yyyy", Locale.getDefault())
 
+    private var firstTime = true
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,100 +50,6 @@ class ScheduleFragment : Fragment(), ScheduleView {
             presenter.updateSchedule()
                 .subscribe()
         }
-        val list = listOf(
-            Schedule(
-                1,
-                Date(),
-                Date(),
-                "OAiP",
-                Teacher("name", "surname", "patronymic", "+375438597349", "kek lol desc"),
-                "310",
-                "62342"
-            ),
-            Schedule(
-                2,
-                Date(),
-                Date(),
-                "OAiP",
-                Teacher("name", "surname", "patronymic", "+375438597349", "kek lol desc"),
-                "310",
-                "62342"
-            ),
-            Schedule(
-                3,
-                Date(),
-                Date(),
-                "OAiP",
-                Teacher("name", "surname", "patronymic", "+375438597349", "kek lol desc"),
-                "310",
-                "62342"
-            ),
-            Schedule(
-                4,
-                Date(),
-                Date(),
-                "OAiP",
-                Teacher("name", "surname", "patronymic", "+375438597349", "kek lol desc"),
-                "310",
-                "62342"
-            ),
-            Schedule(
-                5,
-                Date(),
-                Date(),
-                "OAiP",
-                Teacher("name", "surname", "patronymic", "+375438597349", "kek lol desc"),
-                "310",
-                "62342"
-            ),
-            Schedule(
-                6,
-                Date(),
-                Date(),
-                "OAiP",
-                Teacher("name", "surname", "patronymic", "+375438597349", "kek lol desc"),
-                "310",
-                "62342"
-            ),
-            Schedule(
-                7,
-                Date(),
-                Date(),
-                "OAiP",
-                Teacher("name", "surname", "patronymic", "+375438597349", "kek lol desc"),
-                "310",
-                "62342"
-            ),
-            Schedule(
-                8,
-                Date(),
-                Date(),
-                "OAiP",
-                Teacher("name", "surname", "patronymic", "+375438597349", "kek lol desc"),
-                "310",
-                "62342"
-            ),
-            Schedule(
-                9,
-                Date(),
-                Date(),
-                "OAiP",
-                Teacher("name", "surname", "patronymic", "+375438597349", "kek lol desc"),
-                "310",
-                "62342"
-            ),
-            Schedule(
-                0,
-                Date(),
-                Date(),
-                "OAiP",
-                Teacher("name", "surname", "patronymic", "+375438597349", "kek lol desc"),
-                "310",
-                "62342"
-            )
-        )
-        renderSchedule(list + list + list + list + list)
-
         setupStrip()
     }
 
@@ -163,12 +71,25 @@ class ScheduleFragment : Fragment(), ScheduleView {
 
     override fun renderSchedule(schedule: List<Schedule>) {
         swipeRefresh.isRefreshing = false
-        val data = schedule.groupBy {
+        val today = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+        val dataMap = schedule.groupBy {
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = it.startTime.time
             }
             calendar.get(Calendar.DAY_OF_YEAR)
-        }.values.toList()
+        }.values
+        var idToday = 0
+        val data = dataMap.toList().sortedBy { it[0].startTime }
+        for(i in data.indices) {
+            val calendar = Calendar.getInstance().apply {
+                timeInMillis = data[i][0].startTime.time
+            }
+            val day = calendar.get(Calendar.DAY_OF_YEAR)
+            if(day == today) {
+                idToday = i
+                break
+            }
+        }
         adapter.populate(data)
 
         custom_strip.setup(pager, object : CustomPagerTitleStrip.TitleProvider {
@@ -179,6 +100,10 @@ class ScheduleFragment : Fragment(), ScheduleView {
 
             override fun getSize(): Int = data.size
         })
+        if(firstTime) {
+            firstTime = false
+            pager.setCurrentItem(idToday, false)
+        }
     }
 
     override fun renderStartUpdate() {
