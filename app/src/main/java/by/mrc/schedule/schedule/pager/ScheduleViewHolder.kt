@@ -1,4 +1,4 @@
-package by.mrc.schedule.pager
+package by.mrc.schedule.schedule.pager
 
 import androidx.recyclerview.widget.RecyclerView
 import by.mrc.schedule.schedule.DayView

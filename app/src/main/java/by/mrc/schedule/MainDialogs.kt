@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
-import by.mrc.schedule.groups.GroupRepository
+import by.mrc.schedule.schedule.groups.GroupRepository
 import by.mrc.schedule.settings.SettingsInteractor
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Maybe

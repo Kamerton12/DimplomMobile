@@ -1,5 +1,6 @@
 package by.mrc.schedule.schedule
 
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -8,11 +9,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import by.mrc.schedule.BuildConfig
 import by.mrc.schedule.R
-import by.mrc.schedule.pager.SchedulePagerAdapter
+import by.mrc.schedule.schedule.pager.SchedulePagerAdapter
 import by.mrc.schedule.teacher.Teacher
 import by.mrc.schedule.view.CustomPagerTitleStrip
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import toothpick.Toothpick
 import java.text.SimpleDateFormat
@@ -190,7 +191,7 @@ class ScheduleFragment : Fragment(), ScheduleView {
             timeInMillis = this@format.time
         }
         val month = calendar.get(Calendar.MONTH)
-        return if (true || month == 11 || month == 0) {
+        return if (BuildConfig.DEBUG || month == 11 || month == 0) {
             formatterYear.format(this).capitalize(Locale.getDefault())
         } else {
             formatter.format(this).capitalize(Locale.getDefault())

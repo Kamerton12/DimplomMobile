@@ -1,9 +1,14 @@
 package by.mrc.schedule
 
+import android.app.SearchManager
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentManager
 import by.mrc.schedule.schedule.ScheduleFragment
 import by.mrc.schedule.teacher.TeachersFragment
@@ -19,6 +24,9 @@ class MainActivity : AppCompatActivity(), MainView {
     private val dialogs = MainDialogs(this)
     private val presenter = MainPresenter(this)
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+    @Volatile
+    private var canChangeTitle = true
+    private var lastSavedTitle = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Toothpick.inject(dialogs, Toothpick.openScope("APP"))
@@ -33,7 +41,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    bottomSheet.visibility = View.GONE
+//                    bottomSheet.visibility = View.GONE
                 }
             }
 
@@ -49,17 +57,22 @@ class MainActivity : AppCompatActivity(), MainView {
                     item.isChecked = true
                 }
                 R.id.settings -> {
-                    bottomSheet.visibility = View.VISIBLE
+//                    bottomSheet.visibility = View.VISIBLE
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 }
             }
             false
         }
-        bottom_navigation.selectedItemId = R.id.lessons
+        bottom_navigation.selectedItemId = R.id.teachers
         presenter.loadCurrentGroupAndUpdateTitle()
     }
 
     private fun FragmentManager.openFragment(tag: String) {
+        when (tag) {
+            TeachersFragment.TAG -> title = "Преподаватели"
+            ScheduleFragment.TAG -> title = lastSavedTitle
+        }
+        canChangeTitle = ScheduleFragment.TAG == tag
         val transaction = beginTransaction()
         val foundFragment = findFragmentByTag(tag)
         if (foundFragment == null) {
@@ -85,7 +98,10 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun setTitle(text: String) {
-        title = text
+        lastSavedTitle = text
+        if(canChangeTitle) {
+            title = text
+        }
     }
 
     override fun hideBottomSheet() {

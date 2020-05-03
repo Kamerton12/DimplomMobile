@@ -38,14 +38,11 @@ class SettingsPresenter(private val view: SettingsView) {
 //    }
 
     fun editButtonClicked() {
+        view.hideBottomSheet()
         view.getDialogs().showChooseGroupDialog()
             .observeOn(Schedulers.io())
             .flatMapCompletable { newName ->
                 settingsInteractor.setGroup(newName)
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnComplete {
-                view.hideBottomSheet()
             }
             .subscribe()
     }

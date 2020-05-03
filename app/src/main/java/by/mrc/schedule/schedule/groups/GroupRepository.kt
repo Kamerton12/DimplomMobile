@@ -1,6 +1,5 @@
-package by.mrc.schedule.groups
+package by.mrc.schedule.schedule.groups
 
-import by.mrc.schedule.schedule.Schedule
 import com.google.gson.Gson
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
