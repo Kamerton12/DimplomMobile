@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(), MainView {
             }
             false
         }
-        bottom_navigation.selectedItemId = R.id.teachers
+        bottom_navigation.selectedItemId = R.id.lessons
         presenter.loadCurrentGroupAndUpdateTitle()
     }
 

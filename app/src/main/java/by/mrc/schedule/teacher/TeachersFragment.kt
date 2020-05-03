@@ -7,11 +7,14 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import by.mrc.schedule.R
 import by.mrc.schedule.teacher.recycler.TeacherAdapter
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import kotlinx.android.synthetic.main.fragment_schedule.swipeRefresh
 import kotlinx.android.synthetic.main.fragment_teachers.*
+import toothpick.Toothpick
 
 
 class TeachersFragment: Fragment(), TeacherView {
@@ -25,20 +28,24 @@ class TeachersFragment: Fragment(), TeacherView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Toothpick.inject(presenter, Toothpick.openScope("APP"))
         setHasOptionsMenu(true)
         return layoutInflater.inflate(R.layout.fragment_teachers, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        presenter.wireUpdates()
         swipeRefresh.setOnRefreshListener {
-            swipeRefresh.isRefreshing = false
+            presenter.updateTeachers()
         }
         teacher_recycler.adapter = adapter
-        adapter.populate(listOf(Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("Леонид", "Назаров", "Викторович", "+375 (44) 77-33-782", "Преподаватель высшей категории дисциплин общепрофессионального и специального циклов\n" +
-                "\n" +
-                "e-mail: leon_naz1@tut.by\n" +
-                "\n" +
-                "тел. (017) 351-03-51")))
+//        teacher_recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+//        adapter.populate(listOf(Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("lol", "hey", "lala", "+375 (44) 77-33-782", "email: s312@tut.by"),Teacher("Леонид", "Назаров", "Викторович", "+375 (44) 77-33-782", "Преподаватель высшей категории дисциплин общепрофессионального и специального циклов\n" +
+//                "\n" +
+//                "e-mail: leon_naz1@tut.by\n" +
+//                "\n" +
+//                "тел. (017) 351-03-51")))
+        presenter.updateTeachers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -50,7 +57,7 @@ class TeachersFragment: Fragment(), TeacherView {
             override fun onQueryTextSubmit(query: String): Boolean = true
 
             override fun onQueryTextChange(newText: String): Boolean {
-
+                presenter.queryTextChanged(newText)
                 return true
             }
         })
@@ -58,5 +65,21 @@ class TeachersFragment: Fragment(), TeacherView {
 
     companion object {
         const val TAG = "TeachersFragment"
+    }
+
+    override fun renderTeachers(teachers: List<Teacher>) {
+        swipeRefresh.isRefreshing = false
+        if(teachers.isEmpty()) {
+            emptyView.visibility = View.VISIBLE
+            teacher_recycler.visibility = View.GONE
+        } else {
+            emptyView.visibility = View.GONE
+            teacher_recycler.visibility = View.VISIBLE
+        }
+        adapter.populate(teachers)
+    }
+
+    override fun showLoading() {
+        swipeRefresh.isRefreshing = true
     }
 }
