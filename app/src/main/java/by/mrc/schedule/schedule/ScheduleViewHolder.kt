@@ -23,7 +23,7 @@ class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view){
         startTimeView.text = dateFormatter.format(schedule.startTime)
         endTimeView.text = dateFormatter.format(schedule.endTime)
         officeView.text = schedule.office
-        disciplineView.text = schedule.discipline
+        disciplineView.text = schedule.discipline.shortName
         teacherView.text = schedule.teacher.toLocalString()
     }
 
