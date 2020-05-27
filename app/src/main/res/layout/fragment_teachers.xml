@@ -7,40 +7,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/teacherCoordinator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/base">
+        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/teacher_recycler"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:orientation="vertical"
-            android:padding="4dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_teacher" />
+            android:background="@color/base">
 
-        <LinearLayout
-            android:id="@+id/emptyView"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/base"
-            android:gravity="center_horizontal"
-            android:translationZ="-1px" >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/teacher_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:padding="4dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_teacher" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="200dp"
-                android:gravity="center"
-                android:padding="16dp"
-                android:text="Преподавателей нет, проверьте строку поиска, или попробуйте позже"
-                android:textColor="@color/text"
-                android:textSize="30sp" />
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/emptyView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/base"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:translationZ="-1px">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="200dp"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="Преподавателей нет, проверьте строку поиска, или попробуйте позже"
+                    android:textColor="@color/text"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

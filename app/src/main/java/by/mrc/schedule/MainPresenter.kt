@@ -2,6 +2,7 @@ package by.mrc.schedule
 
 import by.mrc.schedule.settings.SettingsInteractor
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -20,11 +21,11 @@ class MainPresenter(private val view: MainView) {
                         .flatMapCompletable { newName ->
                             settingsInteractor.setGroup(newName)
                         }
-                        .subscribe()
+                        .subscribeBy()
                 } else {
                     view.setTitle("Расписание для группы $name")
                 }
             }
-            .subscribe()
+            .subscribeBy()
     }
 }

@@ -12,6 +12,7 @@ import by.mrc.schedule.schedule.groups.GroupRepository
 import by.mrc.schedule.settings.SettingsInteractor
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import javax.inject.Inject
 
 class MainDialogs(private val context: Context) {
@@ -43,7 +44,9 @@ class MainDialogs(private val context: Context) {
                         )
                     )
                 }
-                .subscribe()
+                .subscribe(
+                    {}, {}
+                )
 
             settingsInteractor.getGroup()
                 .observeOn(AndroidSchedulers.mainThread())

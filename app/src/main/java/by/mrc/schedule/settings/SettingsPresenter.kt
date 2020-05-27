@@ -1,5 +1,6 @@
 package by.mrc.schedule.settings
 
+import by.mrc.schedule.schedule.db.ScheduleDao
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -13,29 +14,19 @@ class SettingsPresenter(private val view: SettingsView) {
     @Inject
     lateinit var settingsInteractor: SettingsInteractor
 
+    @Inject
+    lateinit var scheduleDao: ScheduleDao
 
     fun init() {
         settingsInteractor.groupNameUpdates()
             .defaultIfEmpty("<not defined>")
+            .observeOn(Schedulers.io())
+            .distinctUntilChanged()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy { name ->
                 view.renderGroupName(name)
             }
     }
-
-//    fun editButtonClicked() {
-//        settingsInteractor.getGroup()
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .doOnSuccess { name ->
-//                view.getDialogs().showChooseGroupDialog(name)
-//                    .observeOn(Schedulers.io())
-//                    .flatMapCompletable { newName ->
-//                        settingsInteractor.setGroup(newName)
-//                    }
-//                    .subscribe()
-//            }
-//            .subscribe()
-//    }
 
     fun editButtonClicked() {
         view.hideBottomSheet()
@@ -44,7 +35,8 @@ class SettingsPresenter(private val view: SettingsView) {
             .flatMapCompletable { newName ->
                 settingsInteractor.setGroup(newName)
             }
-            .subscribe()
+            .doOnComplete { scheduleDao.deleteAll() }
+            .subscribeBy()
     }
 
 }

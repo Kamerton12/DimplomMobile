@@ -1,5 +1,6 @@
 package by.mrc.schedule.schedule
 
+import by.mrc.schedule.schedule.db.ScheduleDao
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
@@ -21,12 +22,15 @@ private val gson: Gson by lazy {
 }
 
 class ScheduleRepository @Inject constructor(
-    private val okHttpClient: OkHttpClient
+    private val okHttpClient: OkHttpClient,
+    private val scheduleDao: ScheduleDao
 ) {
-    fun getSchedule(groupName: String): Single<List<Schedule>> {
+    //true - cache
+    //false - fetched
+    fun getSchedule(groupName: String): Single<Pair<List<Schedule>, Boolean>> {
         return Single.create<List<Schedule>> { emitter ->
             val date = Calendar.getInstance()
-            if(date.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+            if (date.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
                 date.add(Calendar.DAY_OF_MONTH, -2)
             } else {
                 date.add(Calendar.DAY_OF_MONTH, -1)
@@ -39,7 +43,7 @@ class ScheduleRepository @Inject constructor(
                 .url("http://192.168.0.25/user_api/lessons?from=${date.timeInMillis}")
                 .get()
                 .build()
-            okHttpClient.newCall(request).enqueue(object: Callback {
+            okHttpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     emitter.onError(e)
                 }
@@ -54,6 +58,17 @@ class ScheduleRepository @Inject constructor(
             .map { list ->
                 list.filter { it.group == groupName }
             }
+            .doOnSuccess { scheduleDao.replaceAllSchedule(it) }
+            .map { it to false }
+            .onErrorResumeNext {
+                loadFromCache()
+                    .map { it to true }
+            }
+            .subscribeOn(Schedulers.io())
+    }
+
+    fun loadFromCache(): Single<List<Schedule>> {
+        return Single.fromCallable { scheduleDao.getAllSchedule() }
             .subscribeOn(Schedulers.io())
     }
 }

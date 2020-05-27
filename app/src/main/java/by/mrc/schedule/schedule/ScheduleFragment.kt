@@ -1,11 +1,13 @@
 package by.mrc.schedule.schedule
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -14,6 +16,9 @@ import by.mrc.schedule.R
 import by.mrc.schedule.schedule.pager.SchedulePagerAdapter
 import by.mrc.schedule.teacher.Teacher
 import by.mrc.schedule.view.CustomPagerTitleStrip
+import com.google.android.material.snackbar.Snackbar
+import io.reactivex.rxjava3.kotlin.subscribeBy
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import toothpick.Toothpick
 import java.text.SimpleDateFormat
@@ -29,6 +34,8 @@ class ScheduleFragment : Fragment(), ScheduleView {
 
     private var firstTime = true
 
+    private var snackbar: Snackbar? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,7 +43,7 @@ class ScheduleFragment : Fragment(), ScheduleView {
     ): View? {
         Toothpick.inject(presenter, Toothpick.openScope("APP"))
         presenter.scheduleUpdates()
-            .subscribe()
+            .subscribeBy()
         return inflater.inflate(R.layout.fragment_schedule, container, false)
     }
 
@@ -48,7 +55,7 @@ class ScheduleFragment : Fragment(), ScheduleView {
 
         swipeRefresh.setOnRefreshListener {
             presenter.updateSchedule()
-                .subscribe()
+                .subscribeBy()
         }
         setupStrip()
     }
@@ -69,8 +76,10 @@ class ScheduleFragment : Fragment(), ScheduleView {
         const val TAG = "ScheduleFragment"
     }
 
-    override fun renderSchedule(schedule: List<Schedule>) {
-        swipeRefresh.isRefreshing = false
+    override fun renderSchedule(schedule: List<Schedule>, fromCache: Boolean, stopSpinner: Boolean) {
+        if(stopSpinner) {
+            swipeRefresh.isRefreshing = false
+        }
         val today = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         val dataMap = schedule.groupBy {
             val calendar = Calendar.getInstance().apply {
@@ -80,17 +89,22 @@ class ScheduleFragment : Fragment(), ScheduleView {
         }.values
         var idToday = 0
         val data = dataMap.toList().sortedBy { it[0].startTime }
-        for(i in data.indices) {
+        for (i in data.indices) {
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = data[i][0].startTime.time
             }
             val day = calendar.get(Calendar.DAY_OF_YEAR)
-            if(day == today) {
+            if (day == today) {
                 idToday = i
                 break
             }
         }
         adapter.populate(data)
+        if (data.isEmpty()) {
+            pager.visibility = View.GONE
+        } else {
+            pager.visibility = View.VISIBLE
+        }
 
         custom_strip.setup(pager, object : CustomPagerTitleStrip.TitleProvider {
 
@@ -100,9 +114,18 @@ class ScheduleFragment : Fragment(), ScheduleView {
 
             override fun getSize(): Int = data.size
         })
-        if(firstTime) {
+        if (firstTime) {
             firstTime = false
             pager.setCurrentItem(idToday, false)
+        }
+        snackbar?.dismiss()
+        if (fromCache) {
+            snackbar = Snackbar
+                .make(coordinator, "Не удалось обновить расписание", Snackbar.LENGTH_LONG)
+            snackbar?.view?.setBackgroundColor(Color.RED)
+            snackbar?.view?.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)?.textSize =
+                18f
+            snackbar?.show()
         }
     }
 

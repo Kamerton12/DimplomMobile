@@ -2,15 +2,19 @@ package by.mrc.schedule.teacher
 
 import android.app.SearchManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SnapHelper
 import by.mrc.schedule.R
 import by.mrc.schedule.teacher.recycler.TeacherAdapter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import kotlinx.android.synthetic.main.fragment_schedule.swipeRefresh
 import kotlinx.android.synthetic.main.fragment_teachers.*
@@ -22,6 +26,8 @@ class TeachersFragment: Fragment(), TeacherView {
     private val presenter = TeacherPresenter(this)
     private val adapter = TeacherAdapter()
     private var searchView: SearchView? = null
+
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,8 +67,10 @@ class TeachersFragment: Fragment(), TeacherView {
         const val TAG = "TeachersFragment"
     }
 
-    override fun renderTeachers(teachers: List<Teacher>) {
-        swipeRefresh.isRefreshing = false
+    override fun renderTeachers(teachers: List<Teacher>, fromCache: Boolean, stopSpinner: Boolean) {
+        if(stopSpinner) {
+            swipeRefresh.isRefreshing = false
+        }
         if(teachers.isEmpty()) {
             emptyView.visibility = View.VISIBLE
             teacher_recycler.visibility = View.GONE
@@ -71,6 +79,14 @@ class TeachersFragment: Fragment(), TeacherView {
             teacher_recycler.visibility = View.VISIBLE
         }
         adapter.populate(teachers)
+        snackbar?.dismiss()
+        if(fromCache) {
+            snackbar = Snackbar
+                .make(teacherCoordinator, "Не удалось обновить список преподавателей", Snackbar.LENGTH_LONG)
+            snackbar?.view?.setBackgroundColor(Color.RED)
+            snackbar?.view?.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)?.textSize = 18f
+            snackbar?.show()
+        }
     }
 
     override fun showLoading() {

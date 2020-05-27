@@ -1,10 +1,12 @@
 package by.mrc.schedule.teacher
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.kotlin.Observables
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
 
@@ -14,11 +16,17 @@ class TeacherPresenter(private val view: TeacherView) {
     lateinit var teacherRepository: TeacherRepository
 
     private val queryUpdates = BehaviorSubject.createDefault("")
-    private val teacherUpdates = BehaviorSubject.createDefault<List<Teacher>>(emptyList())
+    private val teacherUpdates = BehaviorSubject.createDefault(emptyList<Teacher>() to (false to false))
+
+    @Volatile
+    private var queryUpdate = true
 
     fun wireUpdates() {
-        Observables.combineLatest(queryUpdates, teacherUpdates) { query, teachers ->
-            teachers.filter { it.filter(query) }
+        Observables.combineLatest(
+            queryUpdates.doOnNext { queryUpdate = true },
+            teacherUpdates.doOnNext { queryUpdate = false }
+        ) { query, teachers ->
+            teachers.first.filter { it.filter(query) } to ((!queryUpdate && teachers.second.first) to teachers.second.second)
         }
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -26,7 +34,7 @@ class TeacherPresenter(private val view: TeacherView) {
                 view.showLoading()
             }
             .subscribe { teachers ->
-                view.renderTeachers(teachers)
+                view.renderTeachers(teachers.first, teachers.second.first, teachers.second.second)
             }
     }
 
@@ -35,9 +43,13 @@ class TeacherPresenter(private val view: TeacherView) {
     }
 
     fun updateTeachers() {
-        teacherRepository.getTeacher()
+        teacherRepository.getTeachersFromCache()
             .subscribe { teachers ->
-                teacherUpdates.onNext(teachers)
+                teacherUpdates.onNext(teachers to (false to false))
+            }
+        teacherRepository.getTeachers()
+            .subscribe { teachers ->
+                teacherUpdates.onNext(teachers.first to (teachers.second to true))
             }
     }
 
