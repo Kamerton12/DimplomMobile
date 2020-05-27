@@ -8,6 +8,9 @@ interface ScheduleDao {
     @Query("SELECT * FROM schedule")
     fun getAllSchedule(): List<Schedule>
 
+    @Query("SELECT * FROM schedule WHERE id = :id")
+    fun getById(id: Int): Schedule
+
     @Transaction
     fun replaceAllSchedule(schedule: List<Schedule>) {
         deleteAll()

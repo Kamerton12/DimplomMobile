@@ -71,4 +71,9 @@ class ScheduleRepository @Inject constructor(
         return Single.fromCallable { scheduleDao.getAllSchedule() }
             .subscribeOn(Schedulers.io())
     }
+
+    fun getScheduleByIdFromCache(id: Int): Single<Schedule> {
+        return Single.fromCallable { scheduleDao.getById(id) }
+            .subscribeOn(Schedulers.io())
+    }
 }

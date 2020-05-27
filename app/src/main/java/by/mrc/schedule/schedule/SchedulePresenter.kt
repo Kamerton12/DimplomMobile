@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.kotlin.Observables
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -18,6 +19,15 @@ class SchedulePresenter(
 
     @Inject
     lateinit var settingsInteractor: SettingsInteractor
+
+    val clicks: (Int) -> Unit = {
+        scheduleRepository.getScheduleByIdFromCache(it)
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess { schedule ->
+                view.scheduleDialogs().showFullScheduleDialog(schedule)
+            }
+            .subscribeBy()
+    }
 
     fun updateSchedule(): Completable {
         return settingsInteractor.getGroup()

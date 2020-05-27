@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.mrc.schedule.BuildConfig
+import by.mrc.schedule.MainDialogs
 import by.mrc.schedule.R
 import by.mrc.schedule.schedule.pager.SchedulePagerAdapter
 import by.mrc.schedule.teacher.Teacher
@@ -28,6 +30,7 @@ class ScheduleFragment : Fragment(), ScheduleView {
 
     private lateinit var adapter: SchedulePagerAdapter
     private val presenter = SchedulePresenter(this)
+    private lateinit var dialogs: ScheduleDialogs
 
     private val formatter = SimpleDateFormat("EEEE dd.MM", Locale.getDefault())
     private val formatterYear = SimpleDateFormat("EEEE dd.MM.yyyy", Locale.getDefault())
@@ -41,6 +44,7 @@ class ScheduleFragment : Fragment(), ScheduleView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        dialogs = ScheduleDialogs(requireContext())
         Toothpick.inject(presenter, Toothpick.openScope("APP"))
         presenter.scheduleUpdates()
             .subscribeBy()
@@ -48,7 +52,7 @@ class ScheduleFragment : Fragment(), ScheduleView {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = SchedulePagerAdapter()
+        adapter = SchedulePagerAdapter(presenter.clicks)
         pager.adapter = adapter
 
         fixSensitivity(swipeRefresh)
@@ -133,13 +137,17 @@ class ScheduleFragment : Fragment(), ScheduleView {
         swipeRefresh.isRefreshing = true
     }
 
+    override fun showToast(text: String) {
+        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
+    }
+
     private fun Date?.format(): String {
         this ?: return ""
         val calendar = Calendar.getInstance().apply {
             timeInMillis = this@format.time
         }
         val month = calendar.get(Calendar.MONTH)
-        return if (BuildConfig.DEBUG || month == 11 || month == 0) {
+        return if (month == 11 || month == 0) {
             formatterYear.format(this).capitalize(Locale.getDefault())
         } else {
             formatter.format(this).capitalize(Locale.getDefault())
@@ -162,5 +170,9 @@ class ScheduleFragment : Fragment(), ScheduleView {
             }
         }
         return this
+    }
+
+    override fun scheduleDialogs(): ScheduleDialogs {
+        return dialogs
     }
 }

@@ -8,9 +8,9 @@ import by.mrc.schedule.R
 import kotlinx.android.synthetic.main.fragment_day.view.*
 
 
-class DayView(context: Context, attributeSet: AttributeSet? = null): FrameLayout(context, attributeSet) {
+class DayView(context: Context, clicks: (Int) -> Unit): FrameLayout(context, null) {
 
-    private val adapter = ScheduleAdapter()
+    private val adapter = ScheduleAdapter(clicks)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.fragment_day, this)

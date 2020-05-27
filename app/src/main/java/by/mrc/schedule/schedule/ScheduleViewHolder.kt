@@ -19,12 +19,13 @@ class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val disciplineView = view.findViewById<TextView>(R.id.lesson)
     private val teacherView = view.findViewById<TextView>(R.id.teacher)
 
-    fun bind(schedule: Schedule) {
+    fun bind(schedule: Schedule, click: () -> Unit) {
         startTimeView.text = dateFormatter.format(schedule.startTime)
         endTimeView.text = dateFormatter.format(schedule.endTime)
         officeView.text = schedule.office
         disciplineView.text = schedule.discipline.shortName
         teacherView.text = schedule.teacher.toLocalString()
+        itemView.setOnClickListener { click() }
     }
 
     private fun Teacher.toLocalString(): String {
