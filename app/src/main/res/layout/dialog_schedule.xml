@@ -13,10 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
         android:textColor="@color/text"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/office"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="18:00" />
 
@@ -44,7 +43,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/teacher"
         app:layout_constraintTop_toBottomOf="@+id/teacher"
-        app:layout_constraintVertical_bias="0.0"
         tools:text="301" />
 
     <TextView
@@ -67,7 +65,7 @@
         android:id="@+id/teacher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:textColor="@color/text_secondary"
         app:layout_constraintEnd_toEndOf="@+id/lesson"
         app:layout_constraintTop_toBottomOf="@+id/lesson"
@@ -83,5 +81,14 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/startTime"
         app:layout_constraintTop_toTopOf="@id/startTime"
-        app:layout_constraintVertical_bias="0.6" />
+        app:layout_constraintVertical_bias="0.58" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:text="Каб."
+        android:textColor="@color/text"
+        app:layout_constraintBaseline_toBaselineOf="@+id/office"
+        app:layout_constraintEnd_toStartOf="@id/office" />
 </androidx.constraintlayout.widget.ConstraintLayout>
