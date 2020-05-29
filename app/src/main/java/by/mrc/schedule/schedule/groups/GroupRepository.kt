@@ -1,5 +1,6 @@
 package by.mrc.schedule.schedule.groups
 
+import by.mrc.schedule.Settings
 import com.google.gson.Gson
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -13,7 +14,7 @@ class GroupRepository @Inject constructor(
     fun getGroups(): Single<List<String>> {
         return Single.create<List<String>> { emitter ->
             val request = Request.Builder()
-                .url("http://192.168.0.25/user_api/groups")
+                .url("${Settings.URL}/user_api/groups")
                 .get()
                 .build()
             okHttpClient.newCall(request).enqueue(object: Callback {

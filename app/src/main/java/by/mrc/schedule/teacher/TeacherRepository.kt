@@ -1,5 +1,6 @@
 package by.mrc.schedule.teacher
 
+import by.mrc.schedule.Settings
 import by.mrc.schedule.teacher.db.TeacherDao
 import com.google.gson.Gson
 import io.reactivex.rxjava3.core.Single
@@ -15,7 +16,7 @@ class TeacherRepository @Inject constructor(
     fun getTeachers(): Single<Pair<List<Teacher>, Boolean>> {
         return Single.create<List<Teacher>> { emitter ->
             val request = Request.Builder()
-                .url("http://192.168.0.25/user_api/teachers")
+                .url("${Settings.URL}/user_api/teachers")
                 .get()
                 .build()
             okHttpClient.newCall(request).enqueue(object : Callback {

@@ -1,5 +1,6 @@
 package by.mrc.schedule.schedule
 
+import by.mrc.schedule.Settings
 import by.mrc.schedule.schedule.db.ScheduleDao
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -40,7 +41,7 @@ class ScheduleRepository @Inject constructor(
             date.set(Calendar.SECOND, 0)
             date.set(Calendar.MILLISECOND, 0)
             val request = Request.Builder()
-                .url("http://192.168.0.25/user_api/lessons?from=${date.timeInMillis}")
+                .url("${Settings.URL}/user_api/lessons?from=${date.timeInMillis}")
                 .get()
                 .build()
             okHttpClient.newCall(request).enqueue(object : Callback {
