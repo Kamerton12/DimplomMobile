@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import by.mrc.schedule.schedule.groups.GroupRepository
 import by.mrc.schedule.settings.SettingsInteractor
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.kotlin.subscribeBy
@@ -25,7 +26,7 @@ class MainDialogs(private val context: Context) {
 
     fun showChooseGroupDialog(cancelable: Boolean = true): Maybe<String> {
         return Maybe.create { emitter ->
-            val dialogBuilder = AlertDialog.Builder(context).create()
+            val dialogBuilder = MaterialAlertDialogBuilder(context, R.style.MyRounded_MaterialComponents_MaterialAlertDialog).create()
             val inflater = LayoutInflater.from(context)
             val dialogView = inflater.inflate(R.layout.dialog_editing_group_name, null)
             dialogBuilder.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);

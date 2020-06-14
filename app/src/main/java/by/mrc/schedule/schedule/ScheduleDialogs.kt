@@ -1,11 +1,11 @@
 package by.mrc.schedule.schedule
 
-import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.TextView
 import by.mrc.schedule.R
 import by.mrc.schedule.teacher.Teacher
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,7 +27,7 @@ class ScheduleDialogs(private val context: Context) {
         disciplineView.text = schedule.discipline.name
         teacherView.text = schedule.teacher.toLocalString()
 
-        val dialog = AlertDialog.Builder(context).create()
+        val dialog = MaterialAlertDialogBuilder(context, R.style.MyRounded_MaterialComponents_MaterialAlertDialog).create()
 
         dialog.setView(view)
         dialog.show()
