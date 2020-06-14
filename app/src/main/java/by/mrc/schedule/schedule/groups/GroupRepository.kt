@@ -24,8 +24,12 @@ class GroupRepository @Inject constructor(
 
                 override fun onResponse(call: Call, response: Response) {
                     val responseString = response.body?.string() ?: "[]"
-                    val res = Gson().fromJson(responseString, Array<String>::class.java).toList()
-                    emitter.onSuccess(res)
+                    try {
+                        val res = Gson().fromJson(responseString, Array<String>::class.java).toList()
+                        emitter.onSuccess(res)
+                    } catch (t: Throwable) {
+                        emitter.onError(t)
+                    }
                 }
             })
         }

@@ -51,8 +51,12 @@ class ScheduleRepository @Inject constructor(
 
                 override fun onResponse(call: Call, response: Response) {
                     val responseString = response.body?.string() ?: "[]"
-                    val res = gson.fromJson(responseString, Array<Schedule>::class.java).toList()
-                    emitter.onSuccess(res)
+                    try {
+                        val res = gson.fromJson(responseString, Array<Schedule>::class.java).toList()
+                        emitter.onSuccess(res)
+                    } catch (t: Throwable) {
+                        emitter.onError(t)
+                    }
                 }
             })
         }
