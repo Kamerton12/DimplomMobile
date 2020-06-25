@@ -26,7 +26,12 @@ class SchedulePresenter(
             .doOnSuccess { schedule ->
                 view.scheduleDialogs().showFullScheduleDialog(schedule)
             }
-            .subscribeBy()
+            .subscribeBy(
+                onSuccess = {},
+                onError = {
+                    print(it.message)
+                }
+            )
     }
 
     fun updateSchedule(): Completable {

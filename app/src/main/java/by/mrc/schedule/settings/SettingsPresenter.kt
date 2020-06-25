@@ -2,6 +2,8 @@ package by.mrc.schedule.settings
 
 import by.mrc.schedule.schedule.db.ScheduleDao
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.kotlin.Observables
@@ -32,10 +34,20 @@ class SettingsPresenter(private val view: SettingsView) {
         view.hideBottomSheet()
         view.getDialogs().showChooseGroupDialog()
             .observeOn(Schedulers.io())
-            .flatMapCompletable { newName ->
-                settingsInteractor.setGroup(newName)
+            .flatMapSingle { newName ->
+                settingsInteractor.getGroup()
+                    .map { oldName ->
+                        newName to oldName
+                    }
             }
-            .doOnComplete { scheduleDao.deleteAll() }
+            .flatMapCompletable { pair ->
+                if(pair.first == pair.second) {
+                    Completable.complete()
+                } else {
+                    settingsInteractor.setGroup(pair.first)
+                        .doOnComplete { scheduleDao.deleteAll() }
+                }
+            }
             .subscribeBy()
     }
 
